@@ -1,7 +1,19 @@
 <?php
 
 session_start();
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "products";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
 $conn=mysqli_connect("localhost","root","","products");
+
 
 /*if(isset($_GET["add_to_cart"]) == 'add'){
     $id = $_GET['id'];
@@ -98,7 +110,7 @@ $conn=mysqli_connect("localhost","root","","products");
 <body>
 <div class="container ">
             <h1 class="headerh text-center text-dark mb-3 ">products </h1>
-             
+            <div class="container row ">
         <?php  
         $query = "SELECT * FROM items ";  
         $result = mysqli_query($conn, $query);  
@@ -108,35 +120,38 @@ $conn=mysqli_connect("localhost","root","","products");
              {  
                 
                 ?>
-                 <div class="col-md-4">
+               
+                 <div class=" col-md-3 col-lg-3">
                 <form action="index.php?action=add&id=<?php echo  $item['id'];?>" method="POST">
-                
-            <div class="text-info"><?php echo  $item['name']?></div>
+               
+            <div class="text-primary"><?php echo  $item['name']?></div>
             <div class="product-image"><img src="<?php echo $item['image']; ?>"></div>
-			<div class="text-danger"><?php echo  $item['descr'];?></div>
+			<div class="text-dark"><?php echo  $item['descr'];?></div>
 			<div class="text-danger"><?php echo  $item['price'];?></div>
 			<input type="text" class="form-control" name="quantity" value="1"  />
+               
                       <input type="hidden" name="name" value="<?php echo  $item['name'];?>">
                       <input type="hidden" name="image" value="<?php echo  $item['image']?>">
                      
                     <input type="hidden" name="descr" value="<?php echo  $item['descr'];?>">
                     <input type="hidden" name="price" value="<?php echo  $item['price'];?>">
-                    <input type="hidden" name="quantity" value="1">
-            <input type="submit" value="Add to Cart" style="margin-top:5px;" class="btn btn-seccess" name="add_to_cart" />
-			
+                    <input type="hidden" name="quantity" value="1" size="2">
+            <input type="submit" value="Add to Cart" style="margin-top:5px;" class="btn btn-success" name="add_to_cart" />
+            
 			</form>
 		
                    
-        </div>   <?php }}?>
+                 </div>   <?php }}?> </div> 
              
                 <div style="clear:both"></div>  
                 <br />  
-                <h3>Order Details</h3>  
+                <h3>cart</h3>  
                 <div class="table-responsive">  
                      <table class="table table-bordered">  
                           <tr>  
                                <th width="40%">Item Name</th>  
-                               <th width="10%">Quantity</th>  
+                               <th width="10%">describtion</th>  
+                               <th width="10%">quantity</th>  
                                <th width="20%">Price</th>  
                                <th width="15%">Total</th>  
                                <th width="5%">Action</th>  
@@ -150,9 +165,10 @@ $conn=mysqli_connect("localhost","root","","products");
                           ?>  
                           <tr>  
                                <td><?php echo $values["name"]; ?></td>  
-                               <td><?php echo $values["quantity"]; ?></td>  
+                               <td><?php echo $values["descr"]; ?></td> 
+                               <td><?php echo $values["quantity"]; ?></td>   
                                <td>$ <?php echo $values["price"]; ?></td>  
-                               <td>$ <?php echo number_format($values["quantity"] * $values["price"], 2); ?></td>  
+                               <td>$ <?php echo number_format($values["quantity"] * $values["price"] ,2); ?></td>  
                                <td><a href="index.php?action=delete&id=<?php echo $values["id"]; ?>"><span class="text-danger">Remove</span></a></td>  
                           </tr>  
                           <?php  
@@ -161,13 +177,14 @@ $conn=mysqli_connect("localhost","root","","products");
                           ?>  
                           <tr>  
                                <td colspan="3" >Total</td>  
-                               <td >$ <?php echo number_format($total, 2); ?></td>  
+                               <td >$ <?php echo number_format($total,2); ?></td>  
                                <td></td>  
                           </tr>  
                           <?php  
                           }  
                           ?>  
-                     </table>  
+                     </table> 
+                     
                 </div>  
            </div>  
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
